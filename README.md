@@ -18,7 +18,7 @@ O software escolhido para testar o periférico acelerador e o paralelismo feitos
 ## Periférico de aceleração e paralelismo da CPU
 Será utilizado para testes o método de cálculo de exponenciais utilizando tabelas pré-processadas de logaritmos e exponenciais. Dessa forma, o acelerador deverá possuir uma memória do tipo read-only que permite calcular com boa precisão e boa eficiência uma exponencial em pontos flutuante. O periférico é um coprocessador de exponenciação paralela usando a metodologia de _lookup table_ de logarítimos e exponenciais na base 2; no cenário projetado este hardware foi desenvolvido especificamente para o processador deste sistema, tal que cada _core_ tem acesso exclusivo a uma unidade aritmética de exponenciação do periférico, não havendo concorrência de acesso.  
 
-Outra característica interessante do periférico é que como apenas a mantissa (23 bytes do 32 totais) das variáveis de ponto flutuante será utilizada como indexador tanto da tabela de logarítimos quanto da tabela de exponenciais, cada tabela ocupará apenas 23MB de ROM.
+Outra característica interessante do periférico é que como apenas a mantissa (23 bytes do 32 totais) das variáveis de ponto flutuante será utilizada como indexador tanto da tabela de logarítimos quanto da tabela de exponenciais, cada tabela ocupará apenas 32MB de ROM.
 
 Desta forma cada core realizará a exponenciação com o valor `a` da primeira e o valor `b` da segunda, para se obter o resultado `a ^ b`, tal que cada seção destes _arrays_ será calculado por cada um dos _cores_ com apoio do periférico.  
 
