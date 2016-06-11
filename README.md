@@ -50,6 +50,6 @@ O tempo de cálculo das exponenciais praticamente sumir parece contra-intuitivo,
 1. http://www.ic.unicamp.br/~lucas/teaching/mc723/2016-1/p3.html
 2. http://turner.faculty.swau.edu/mathematics/math110de/materials/logtable/
 
-## PS: Apresentação
+#### PS: Apresentação
 Se o horário estiver disponível, deseja-se marcar a apresentação do grupo para 09:45.  
 
