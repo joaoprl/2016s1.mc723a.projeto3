@@ -22,7 +22,7 @@ Outra característica interessante do periférico é que como apenas a mantissa 
 
 Desta forma cada core realizará a exponenciação com o valor `a` da primeira e o valor `b` da segunda, para se obter o resultado `a ^ b`, tal que cada seção destes _arrays_ será calculado por cada um dos _cores_ com apoio do periférico.  
 
-## Aceleração esperada
+## Ganhos de _performance_ esperados
 Considerando que a arquitetura nativa não realiza operações de ponto flutuante, espera-se um ganho de desempenho significativo não só pela metodologia de _lookup table_, mas também devido às unidades de multiplicação e soma de ponto flutuante internas do periférico.  
 
 O cenário de testes envolverá a leitura de um arquivo contendo os valores dos dois arrays de entrada, o cálculo do array de saída e a escrita da saída em outro arquivo.  
