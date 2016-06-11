@@ -28,17 +28,19 @@ Considerando que a arquitetura nativa não realiza operações de ponto flutuant
 O cenário de testes envolverá a leitura de um arquivo contendo os valores dos dois arrays de entrada, o cálculo do array de saída e a escrita da saída em outro arquivo.  
 Em testes realizados com o simulador realizando 10000 exponenciações, as operações de exponenciação ocupam ~86.23% dos ciclos do programa, enquanto a a leitura/escrita de arquivo e o resto do arcabouço ocupam somente ~13.77%.  
 
-Cada operação de exponenciação emulada em ponto flutuante ocupa o surpreendentemente alto valor de ~43k ciclos, enquanto o periférico de aceleração idealmente totalizará apenas 23 ciclos na seguinte sequência de operações (assumido 0 < x devido ao expoente em ponto flutuante; caso deseje-se um expoente inteiro e permita-se o x <= 0 o número de operações finais não muda significativamente).  
+Cada operação de exponenciação emulada em ponto flutuante ocupa o surpreendentemente alto valor de ~43k ciclos, enquanto o periférico de aceleração idealmente totalizará apenas 25 ciclos na seguinte sequência de operações (assumido 0 < x devido ao expoente em ponto flutuante; caso deseje-se um expoente inteiro e permita-se o x <= 0 o número de operações finais não muda significativamente).  
 
 |operação|descrição|ciclos|
 |:---|:---|---:|
-|x = sx · 2 ^ ex|separar sx e ex (0 < x)|1|
+|x = sx · 2 ^ ex|separar sx (mantissa) e ex (expoente)|1|
 |a = lg2(sx)|acessar tabela de logarítimos usando o valor de sx (23b)|10|
 |b = lg2(x) = ex · a|multiplicação|1|
-|c = lg2(x ^ y) = y ·b|multiplicação|1|
-|x ^ y = 2 ^ c|acessar tabela de exponenciais usando o valor de c (23b)|10|
+|c = lg2(x ^ y) = y · b|multiplicação|1|
+|c = nc + fc|separar nc (parte inteira) e fc (parte fracionária)|1|
+|d = x ^ y / 2 ^ nc = 2 ^ fc|acessar tabela de exponenciais usando o valor de fc (<= 23b)|10|
+|x ^ y = d * 2 ^ nc |aumentar o valor do expoente de d em 2 ^ nc|1|
 
-Isso representaria uma redução de 99.9% no número de ciclos perdidos em exponenciação, o que hipoteticamente reduziria o número total de ciclos do programa para ~13.82% do valor original, o que corresponde em linhas gerais para apenas os tempos de acesso aos arquivos de entrada e saída. É claro que quanto menos exponenciações menos dramática é a diferença, e vice-versa.  
+Isso representaria uma redução de 99.9% no número de ciclos perdidos em exponenciação, o que hipoteticamente reduziria o número total de ciclos do programa para ~13.83% do valor original, o que corresponde em linhas gerais para apenas os tempos de acesso aos arquivos de entrada e saída. É claro que quanto menos exponenciações menos dramática é a diferença, e vice-versa.  
 
 O uso do paralelismo com 2 _cores_, sem aceleração, reduziria o percentual total de ciclos consumidos para ~56.89%; com aceleração, o percentual final cairia para ~13.79%.  
 
