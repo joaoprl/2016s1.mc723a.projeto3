@@ -44,6 +44,8 @@ Isso representaria uma redução de 99.9% no número de ciclos perdidos em expon
 
 O uso do paralelismo com 2 _cores_, sem aceleração, reduziria o percentual total de ciclos consumidos para ~56.89%; com aceleração, o percentual final cairia para ~13.79%.  
 
+O tempo de cálculo das exponenciais praticamente sumir parece contra-intuitivo, mas para 10000 exponenciações testadas em um computador real com arquitetura moderna, o tempo de execução com os cálculos e o tempo de execução meramente lendo e escrevendo os arquivos é indiscernível: o número de exponenciações é pequeno demais para que estas operações tenham um tempo de execução comparável ao resto do tempo gasto no resto do código. Poder-se-ia aumentar o número de exponenciações, mas então o tempo de execução sem aceleração ou paralelismo no simulador tornaria-se proibitivamente demorado.  
+
 ## Referências
 1. http://www.ic.unicamp.br/~lucas/teaching/mc723/2016-1/p3.html
 2. http://turner.faculty.swau.edu/mathematics/math110de/materials/logtable/

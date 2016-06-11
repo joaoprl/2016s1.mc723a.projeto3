@@ -24,11 +24,11 @@ int main() {
     fscanf(finp, "%f", &(b[i]));
   }
   fclose(finp);
-  /* for (i = 0; i < n; ++i) { */
-  /*   c = pow(a[i], b[i]); */
-  /*   fprintf(fout, "%f ", c); */
-  /* } */
-  /* fprintf(fout, "\n"); */
+  for (i = 0; i < n; ++i) {
+    c = pow(a[i], b[i]);
+    fprintf(fout, "%f ", c);
+  }
+  fprintf(fout, "\n");
   fclose(fout);
 
   free(a);

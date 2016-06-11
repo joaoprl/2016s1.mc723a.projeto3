@@ -2,7 +2,7 @@
 
 int main() {
   int i = 0;
-  int n = 1000000;
+  int n = 10000;
   FILE* fout = fopen("inp.txt", "w");
 
   fprintf(fout, "%d", n);
