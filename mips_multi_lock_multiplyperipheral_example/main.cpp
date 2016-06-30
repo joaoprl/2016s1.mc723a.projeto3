@@ -112,7 +112,7 @@ int sc_main(int ac, char *av[])
 
   for (uint8_t c_cpu = 0; c_cpu < n_cpus; ++c_cpu) {
     for (uint8_t c_arg = 0; c_arg < ac; ++c_arg) {
-      std::cout << (int)c_cpu << ", " << (int)c_arg << ": " << avn[c_cpu][c_arg] << std::endl;
+      // std::cout << (int)c_cpu << ", " << (int)c_arg << ": " << avn[c_cpu][c_arg] << std::endl;
       delete[] avn[c_cpu][c_arg];
       avn[c_cpu][c_arg] = NULL;
     }

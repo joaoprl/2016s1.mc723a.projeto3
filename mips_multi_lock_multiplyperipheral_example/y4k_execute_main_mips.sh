@@ -5,6 +5,6 @@ export PATH=$PATH:/home/staff/lucas/mips-newlib-elf/bin/
 # /home/staff/lucas/mc723/hw_tools/ArchC-2.2.0/installed/bin:/home/staff/lucas/mc723/hw_tools/mips-newlib-elf/bin/
 # export PATH=$PATH:/home/staff/lucas/mc723/hw_tools/ArchC-2.2.0/installed/bin:/home/staff/lucas/mc723/hw_tools/mips-newlib-elf/bin/
 
-MIPSTLMPATH='/home/ec2014/ra033324/y4k/classes/mc723a/mips_multi_lock_multiplyperipheral_example/'
+MIPSTLMPATH='/home/ec2014/ra033324/y4k/classes/mc723a/git_projeto3/mips_multi_lock_multiplyperipheral_example/'
 
-${MIPSTLMPATH}/mips.x --load=./hello.x
+${MIPSTLMPATH}/mips.x --load=./main.mips
