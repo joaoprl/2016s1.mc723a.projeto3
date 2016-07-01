@@ -49,10 +49,11 @@ using user::ac_tlm_peripheral;
 ac_tlm_peripheral::ac_tlm_peripheral( sc_module_name module_name , int k ) :
   sc_module( module_name ),
   target_export("iport"),
-  result(0),
-  operand1(0),
-  operand2(0),
-  lock(0)
+  lock(0),
+  port1(0),
+  port2(0),
+  port3(0),
+  port4(0)
 {
     /// Binds target_export to the peripheral
     target_export( *this );
@@ -72,7 +73,18 @@ ac_tlm_peripheral::~ac_tlm_peripheral() {
 */
 ac_tlm_rsp_status ac_tlm_peripheral::writem( const uint32_t &a , const uint32_t &d )
 {
-  lock = bswap_32(d);
+  if (a == ((uint32_t)(200<<20))) {
+    lock = bswap_32(d);
+  } else if (a == ((uint32_t)(200<<20) +  4)) {
+    port1 = bswap_32(d);
+  } else if (a == ((uint32_t)(200<<20) +  8)) {
+    port2 = bswap_32(d);
+  } else if (a == ((uint32_t)(200<<20) + 12)) {
+    port3 = bswap_32(d);
+  } else if (a == ((uint32_t)(200<<20) + 16)) {
+    port4 = bswap_32(d);
+  }
+  // std::cout << ((uint32_t)(200<<20)) << "addr: " << a << ", lock = " << (int)bswap_32(d) << std::endl;
   return SUCCESS;
 }
 
@@ -84,7 +96,18 @@ ac_tlm_rsp_status ac_tlm_peripheral::writem( const uint32_t &a , const uint32_t 
 */
 ac_tlm_rsp_status ac_tlm_peripheral::readm( const uint32_t &a , uint32_t &d )
 {
-  d = bswap_32(lock);
-  lock = 1;
+  // std::cout << ((uint32_t)(200<<20)) << "addr: " << a << ", lock: " << (int)lock << " -> lock = " << 1 << std::endl;
+  if (a == ((uint32_t)(200<<20))) {
+    d = bswap_32(lock);
+    lock = 1;
+  } else if (a == ((uint32_t)(200<<20) +  4)) {
+    d = bswap_32(port1);
+  } else if (a == ((uint32_t)(200<<20) +  8)) {
+    d = bswap_32(port2);
+  } else if (a == ((uint32_t)(200<<20) + 12)) {
+    d = bswap_32(port3);
+  } else if (a == ((uint32_t)(200<<20) + 16)) {
+    d = bswap_32(port4);
+  }
   return SUCCESS;
 }

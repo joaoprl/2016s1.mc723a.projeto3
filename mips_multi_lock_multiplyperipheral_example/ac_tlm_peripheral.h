@@ -123,10 +123,10 @@ public:
 
 private:
   uint32_t lock;
-  uint32_t result;
-  uint32_t operand1;
-  uint32_t operand2;
-
+  uint32_t port1;
+  uint32_t port2;
+  uint32_t port3;
+  uint32_t port4;
 };
 
 };

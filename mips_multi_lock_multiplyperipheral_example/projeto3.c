@@ -4,6 +4,11 @@
 volatile int *lock = (volatile int *) START_ADRESS;
 volatile static int procCounter = 0;
 
+volatile int *port1 = (volatile int*) (200 * 1024 * 1024 +  4);
+volatile int *port2 = (volatile int*) (200 * 1024 * 1024 +  8);
+volatile int *port3 = (volatile int*) (200 * 1024 * 1024 + 12);
+volatile int *port4 = (volatile int*) (200 * 1024 * 1024 + 16);
+
 void AcquireLock(){
   while(*lock);
 }
@@ -28,6 +33,17 @@ void submain() {
   }
   AcquireLock();
   printf("procNumber %d, a %d\n ", procNumber, a);
+  ReleaseLock();
+
+  AcquireLock();
+  *port1 = 17;
+  *port2 = 18;
+  *port3 = 19;
+  *port4 = 20;
+  printf("*port1: %d\n", *port1);
+  printf("*port2: %d\n", *port2);
+  printf("*port3: %d\n", *port3);
+  printf("*port4: %d\n", *port4);
   ReleaseLock();
 }
 

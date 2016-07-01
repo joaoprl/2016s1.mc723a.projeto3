@@ -7,4 +7,4 @@ export PATH=$PATH:/home/staff/lucas/mips-newlib-elf/bin/
 
 MIPSTLMPATH='/home/ec2014/ra033324/y4k/classes/mc723a/git_projeto3/mips_multi_lock_multiplyperipheral_example/'
 
-${MIPSTLMPATH}/mips.x --load=./main.mips
+${MIPSTLMPATH}/mips.x --load=./projeto3.mips

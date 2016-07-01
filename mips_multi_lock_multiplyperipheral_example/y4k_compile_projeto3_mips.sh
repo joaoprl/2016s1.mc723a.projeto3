@@ -7,5 +7,5 @@ export PATH=$PATH:/home/staff/lucas/mips-newlib-elf/bin/
 Y4KPATH="/home/ec2014/ra033324/y4k/classes/mc723a/git_projeto3/mips_multi_lock_multiplyperipheral_example/"
 
 echo
-echo "mips-newlib-elf-gcc -specs=archc ${Y4KPATH}/main.c -o ${Y4KPATH}/main.mips"
-mips-newlib-elf-gcc -specs=archc -O3 ${Y4KPATH}/main.c -o ${Y4KPATH}/main.mips
+echo "mips-newlib-elf-gcc -specs=archc ${Y4KPATH}/projeto3.c -o ${Y4KPATH}/projeto3.mips"
+mips-newlib-elf-gcc -specs=archc -O3 ${Y4KPATH}/projeto3.c -o ${Y4KPATH}/projeto3.mips
