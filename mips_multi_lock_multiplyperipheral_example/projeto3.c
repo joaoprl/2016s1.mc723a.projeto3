@@ -37,19 +37,24 @@ void submain() {
   /* printf("procNumber %d\n ", procNumber); */
   /* ReleaseLock(); */
 
-  int status = 0;
-  float *p_base = (float*)p_base00, *p_exponent = (float*)p_exponent00;
+  volatile uint32_t *p_status = NULL;
+  volatile float *p_base = NULL, *p_exponent = NULL;
 
-  /* if (procNumber == 0) { */
-  AcquireLock();
-  printf("procNumber: %d\n", procNumber);
-  *p_base = 1.7;
-  *p_exponent = 4.1;
-  printf("base: %10.2f, \t exponent: %10.2f\n", *p_base, *p_exponent);
-  *p_status00 = 1;
-  printf("status: %d\n", *p_status00);
-  printf("result: %10.2f\n", *p_base);
-  ReleaseLock();
+  if (procNumber == 0) {
+    p_status = p_status00;
+    p_base = (volatile float*)p_base00;
+    p_exponent = (volatile float*)p_exponent00;
+
+    *p_base = 1.7;
+    *p_exponent = 4.1;
+    *p_status = 1;
+    AcquireLock();
+    printf("procNumber: %d\n", procNumber);
+    printf("base: %10.2f, \t exponent: %10.2f\n", *p_base, *p_exponent);
+    printf("status: %d\n", *p_status);
+    printf("result: %10.2f\n", *p_base);
+    ReleaseLock();
+  }
 }
 
 int main(int ac, char *av[]){
