@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
+#include <math.h>
+
 #define START_ADDRESS (200<<20)
 
 volatile static uint32_t procCounter = 0;
@@ -50,10 +52,11 @@ void submain() {
     *p_exponent = 4.1;
     *p_status = 1;
     AcquireLock();
-    printf("procNumber: %zu\n", procNumber);
-    printf("base: %10.2f, \t exponent: %10.2f\n", *p_base, *p_exponent);
-    printf("status: %d\n", *p_status);
-    printf("result: %10.2f\n", *p_base);
+    printf("procNumber: \t %zu\n", procNumber);
+    printf("base: \t %10.2f, \t exponent: %10.2f\n", *p_base, *p_exponent);
+    printf("status: \t %d\n", *p_status);
+    printf("result: \t %10.2f\n", *p_base);
+    printf("expected: \t %10.2f\n", pow(1.7, 4.1));
     ReleaseLock();
   }
 }
