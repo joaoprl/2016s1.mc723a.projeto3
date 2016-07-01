@@ -51,13 +51,23 @@ Considerando 4 ciclos para cada escrita/leitura feita pela CPU no periférico, c
 
 Foram considerados 10 ciclos por instrução de acesso à memória, 3 ciclos por instrução de _jump_/_branch_ e 1 ciclo para outros tipos.
 
-#### Programa rodado sem o periférico e sem paralelismo:
+#### Programa rodado sem o periférico e sem paralelismo
 
 |tipo de instrução|número instruções|número de ciclos|
 |:----------------|----------------:|---------------:|
-|acesso à memória |182185643        |1821856430      |
+|acesso à memória |182135643        |1821356430      |
 |_jump_/_branch_  |148346026        | 445038078      |
 |outras           |786748347        | 786748347      |
+
+Total de ciclos: 3053142855 ≃ 3,05 milhões
+
+#### Programa rodado com o periférico mas sem paralelismo
+
+|tipo de instrução|número instruções|número de ciclos|
+|:----------------|----------------:|---------------:|
+|acesso à memória |125338933        |1253389330      |
+|_jump_/_branch_  |101888117        | 305664351      |
+|outras           |508726114        | 508726114      |
 
 ## Referências
 1. http://www.ic.unicamp.br/~lucas/teaching/mc723/2016-1/p3.html

@@ -136,17 +136,17 @@ void submain() {
   printf("Starting exponentiation %zu\n", procNumber);
   ReleaseLock();
 
-  if (0 < procNumber)
-    return;
+  /* if (0 < procNumber) */
+  /*   return; */
 
-  for (i = procNumber; i < N; i += 1) {
-    p_result[i] = p_capital[i] * pow(p_interest[i], p_time[i]);
+  for (i = procNumber; i < N; i += 4) {
+    /* p_result[i] = p_capital[i] * pow(p_interest[i], p_time[i]); */
 
-    /* *p_base = p_interest[i]; */
-    /* *p_exponent = p_time[i]; */
-    /* *p_status = 1; */
-    /* while(*p_status != 0); */
-    /* p_result[i] = p_capital[i] * (*p_base); */
+    *p_base = p_interest[i];
+    *p_exponent = p_time[i];
+    *p_status = 1;
+    while(*p_status != 0);
+    p_result[i] = p_capital[i] * (*p_base);
   }
   p_finished[procNumber] = 1;
 
@@ -169,9 +169,9 @@ void submain() {
     printf("Writing output files and calculating total values.\n");
     ReleaseLock();
 
-    p_file = fopen("./y4k_result0.txt", "w");
+    /* p_file = fopen("./y4k_result0.txt", "w"); */
     /* p_file = fopen("./y4k_result1.txt", "w"); */
-    /* p_file = fopen("./y4k_result2.txt", "w"); */
+    p_file = fopen("./y4k_result2.txt", "w");
     fprintf(p_file, "%d\n", n);
     for (i = 0; i < N; ++i) {
       total_result += p_result[i];
