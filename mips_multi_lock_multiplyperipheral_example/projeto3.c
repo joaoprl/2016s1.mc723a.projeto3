@@ -139,15 +139,15 @@ void submain() {
   /* if (0 < procNumber) */
   /*   return; */
 
-  for (i = procNumber; i < N; i += 4) {
-    /* p_result[i] = p_capital[i] * pow(p_interest[i], p_time[i]); */
+  /* for (i = procNumber; i < N; i += 4) { */
+  /*   /\* p_result[i] = p_capital[i] * pow(p_interest[i], p_time[i]); *\/ */
 
-    *p_base = p_interest[i];
-    *p_exponent = p_time[i];
-    *p_status = 1;
-    while(*p_status != 0);
-    p_result[i] = p_capital[i] * (*p_base);
-  }
+  /*   *p_base = p_interest[i]; */
+  /*   *p_exponent = p_time[i]; */
+  /*   *p_status = 1; */
+  /*   while(*p_status != 0); */
+  /*   p_result[i] = p_capital[i] * (*p_base); */
+  /* } */
   p_finished[procNumber] = 1;
 
   if (procNumber == 0) {

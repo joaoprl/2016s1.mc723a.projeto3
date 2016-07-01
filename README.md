@@ -55,19 +55,38 @@ Foram considerados 10 ciclos por instrução de acesso à memória, 3 ciclos por
 
 |tipo de instrução|número instruções|número de ciclos|
 |:----------------|----------------:|---------------:|
-|acesso à memória |182135643        |1821356430      |
+|acesso à memória |182185643        |1821856430      |
 |_jump_/_branch_  |148346026        | 445038078      |
 |outras           |786748347        | 786748347      |
 
-Total de ciclos: 3053142855 ≃ 3,05 milhões
+Total de ciclos: 3053642855 ≃ 3,05 bilhões
 
 #### Programa rodado com o periférico mas sem paralelismo
 
 |tipo de instrução|número instruções|número de ciclos|
 |:----------------|----------------:|---------------:|
-|acesso à memória |125338933        |1253389330      |
+|acesso à memória |125288933        |1252889330      |
 |_jump_/_branch_  |101888117        | 305664351      |
 |outras           |508726114        | 508726114      |
+
+Total de ciclos da CPU (menos espera pelo periférico): 2067279795 ≃ 2,07 bilhões
+Total de ciclos do periférico: 320000
+Total de ciclos: 2067599795 ≃ 2,07 bilhões
+
+#### Programa rodado com o periférico e com paralelismo
+
+|tipo de instrução|número instruções|número de ciclos|
+|:----------------|----------------:|---------------:|
+|acesso à memória |        |      |
+|_jump_/_branch_  |        |       |
+|outras           |        |       |
+
+Total de ciclos da CPU (menos espera pelo periférico): 
+Total de ciclos do periférico: 320000
+Total de ciclos: 
+
+
+
 
 ## Referências
 1. http://www.ic.unicamp.br/~lucas/teaching/mc723/2016-1/p3.html
