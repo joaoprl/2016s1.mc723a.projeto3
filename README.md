@@ -15,7 +15,7 @@ O simulador utilizado foi criado com a linguagem _ArchC_, desenvolvidos pelo tim
 ## Software a ser executado
 O software escolhido para testar o periférico acelerador e o paralelismo feitos no simulador é um programa que calcula os retornos de capital de investidores com diferentes montantes iniciais, taxas de retorno e períodos de investimento.  
 Este é um problema extremamente relevante no contexto bancário, especialmente devido a certos tipos de investimento usarem taxas de retorno mensais mas com tempo calculado em dias de investimento, tal que a exponenciação se dá com expoentes em ponto flutuante.  
-Desta forma os _inputs_ do programa foram 3 arquivos contendo os [montantes iniciais](mips_multi_lock_multiplyperipheral_example/y4k_initial_capital.txt), as [taxas de retorno](mips_multi_lock_multiplyperipheral_example/monthly_interest.txt), e os [períodos de investimento](mips_multi_lock_multiplyperipheral_example/y4k_investment_time.txt). Todos são precedidos pelo número de clientes para os quais o retorno dos investimentos serão calculados, sendo dez mil investimentos neste exemplo.
+Desta forma os _inputs_ do programa foram 3 arquivos contendo os [montantes iniciais](mips_multi_lock_multiplyperipheral_example/y4k_initial_capital.txt), as [taxas de retorno](mips_multi_lock_multiplyperipheral_example/y4k_monthly_interest.txt), e os [períodos de investimento](mips_multi_lock_multiplyperipheral_example/y4k_investment_time.txt). Todos são precedidos pelo número de clientes para os quais o retorno dos investimentos serão calculados, sendo dez mil investimentos neste exemplo.
 
 Como a arquitetura de CPU utilizada foi a MIPS, operações de ponto flutuante são muito custosas visto que não existem unidades aritiméticas dedicadas para este tipo de operação; assim foi projetado um periférico que realiza as exponenciações fora da CPU. Foi discutido incluir também mais uma variável (capital inicial) a ser passada ao periférico para que ela fosse multiplicada pelo resultado da exponenciação, tal que seriam sanadas completamente as limitações da CPU com relação a estas operações de ponto flutuante; no entanto esta ideia (apesar de ser simplesmente implementável) não foi usada visto que este é um periférico dedicado para exponenciação, sendo considerada uma modificação excessivamente restrita ao cenário considerado. Assim a multiplicação do capital inicial pela taxa de retorno total continuou sendo realizado pela CPU, o que limita o ganho de performance mas torna o periférico mais simples e de uso mais geral.  
 
@@ -31,7 +31,7 @@ Resumidamente, o fluxo de dados entre cada _core_ e cada núcleo exclusivo de pr
 Na simulação o _loop_ leva apenas um ciclo, visto que o cálculo do número de ciclos gasto pelo periférico será realizado a parte a partir das considerações abaixo.
 
 ## Ciclos consumidos por cada operação do periférico
-Cada operação de exponenciação emulada em ponto flutuante ocupa o surpreendentemente alto valor de ~43k ciclos, enquanto o periférico de aceleração idealmente totalizará apenas 25 ciclos na seguinte sequência de operações abaixo (onde _x_ e _y_ representam respectivamente a _base_ e _exponent_).  
+Cada operação de exponenciação emulada em ponto flutuante ocupa o surpreendentemente alto valor de ~43k ciclos, enquanto o periférico de aceleração idealmente totalizará apenas 9 ciclos na seguinte sequência de operações abaixo (onde _x_ e _y_ representam respectivamente a _base_ e _exponent_).  
 
 |operação|descrição|ciclos|
 |:---|:---|---:|
@@ -40,11 +40,25 @@ Cada operação de exponenciação emulada em ponto flutuante ocupa o surpreende
 |b = lg2(x) = ex · a|multiplicação|1|
 |c = lg2(x ^ y) = y · b|multiplicação|1|
 |c = nc + fc|separar nc (parte inteira) e fc (parte fracionária)|1|
-|d = x ^ y / 2 ^ nc = 2 ^ fc|acessar tabela de exponenciais usando o valor de fc (<= 23b)|10|
+|d = x ^ y / 2 ^ nc = 2 ^ fc|acessar tabela de exponenciais usando o valor de fc (<= 23b)|2|
 |x ^ y = d * 2 ^ nc |aumentar o valor do expoente de d em 2 ^ nc|1|
 
-## Aplicações
-Possíveis aplicações encontradas foram de minimização de monômios multivariado, posinômios [3] [4] e métodos que encontram raízes de polinômios (como o método de Newton-Raphson) [5], assim como diversas aplicações que utilizam tais soluções.
+O cálculo acima assume que o acesso à pequena memória ROM do periférico consome apenas 2 ciclos e todas operações de multiplicação de ponto flutuante consomem apenas 1 ciclo.  
+
+Considerando 4 ciclos para cada escrita/leitura feita pela CPU no periférico, chega-se então a 12 ciclos para cada input (escrita de _status_, _base_, e _exponent_), o máximo de 16 ciclos aguardando o periférico terminar (a CPU faz três leituras em que a exponenciação ainda não acabou e mais uma para verificar sucesso), e mais 4 ciclos lendo o resultado. Desta forma cada uma das dez mil exponenciações corresponde a 32 ciclos gastos aguardando o periférico. Na simulação, isso corresponderá a 5 instruções de _load_ por exponenciação executadas pela CPU.
+
+## Resultados
+
+Foram considerados 10 ciclos por instrução de acesso à memória, 3 ciclos por instrução de _jump_/_branch_ e 1 ciclo para outros tipos.
+
+#### Programa rodado sem o periférico e sem paralelismo:
+
+|tipo de instrução|número instruções|número de ciclos|
+|:----------------|----------------:|---------------:|
+|acesso à memória |182185643        |1821856430      |
+|_jump_/_branch_  |148346026        | 445038078      |
+|outras           |786748347        | 786748347      |
+
 ## Referências
 1. http://www.ic.unicamp.br/~lucas/teaching/mc723/2016-1/p3.html
 2. http://turner.faculty.swau.edu/mathematics/math110de/materials/logtable/
