@@ -124,9 +124,21 @@ public:
 private:
   uint32_t lock;
 
+  uint32_t status00;
+  uint32_t base00;
+  uint32_t exponent00;
+
   uint32_t status01;
   uint32_t base01;
   uint32_t exponent01;
+
+  uint32_t status02;
+  uint32_t base02;
+  uint32_t exponent02;
+
+  uint32_t status03;
+  uint32_t base03;
+  uint32_t exponent03;
 
 };
 

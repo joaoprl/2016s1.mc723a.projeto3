@@ -75,14 +75,32 @@ ac_tlm_rsp_status ac_tlm_peripheral::writem( const uint32_t &a , const uint32_t 
   uint32_t temp = 0;
   if (a == ((uint32_t)(200<<20))) {
     this->lock = bswap_32(d);
-  } else if (a == ((uint32_t)(200<<20) +  4)) {
-    this->status01 = bswap_32(d);
+  } else if (a == ((uint32_t)(200<<20) +  4)) { // exponentiation 00
+    this->status00 = bswap_32(d);
   } else if (a == ((uint32_t)(200<<20) +  8)) {
-    this->base01 = bswap_32(d);
-    std::cout << "base01: " << *((float*)(&this->base01)) << std::endl;
+    this->base00 = bswap_32(d);
+    // std::cout << "base00: " << *((float*)(&this->base00)) << std::endl;
   } else if (a == ((uint32_t)(200<<20) + 12)) {
+    this->exponent00 = bswap_32(d);
+    // std::cout << "exponent01: " << *((float*)(&this->exponent01)) << std::endl;
+  } else if (a == ((uint32_t)(200<<20) + 16)) { // exponentiation 01
+    this->status01 = bswap_32(d);
+  } else if (a == ((uint32_t)(200<<20) + 20)) {
+    this->base01 = bswap_32(d);
+  } else if (a == ((uint32_t)(200<<20) + 24)) {
     this->exponent01 = bswap_32(d);
-    std::cout << "exponent01: " << *((float*)(&this->exponent01)) << std::endl;
+  } else if (a == ((uint32_t)(200<<20) + 28)) { // exponentiation 02
+    this->status02 = bswap_32(d);
+  } else if (a == ((uint32_t)(200<<20) + 32)) {
+    this->base02 = bswap_32(d);
+  } else if (a == ((uint32_t)(200<<20) + 36)) {
+    this->exponent02 = bswap_32(d);
+  } else if (a == ((uint32_t)(200<<20) + 40)) { // exponentiation 03
+    this->status03 = bswap_32(d);
+  } else if (a == ((uint32_t)(200<<20) + 44)) {
+    this->base03 = bswap_32(d);
+  } else if (a == ((uint32_t)(200<<20) + 48)) {
+    this->exponent03 = bswap_32(d);
   }
   // std::cout << ((uint32_t)(200<<20)) << "addr: " << a << ", lock = " << (int)bswap_32(d) << std::endl;
   return SUCCESS;
@@ -104,20 +122,50 @@ ac_tlm_rsp_status ac_tlm_peripheral::readm( const uint32_t &a , uint32_t &d )
   if (a == ((uint32_t)(200<<20))) {
     d = bswap_32(this->lock);
     this->lock = 1;
-  } else if (a == ((uint32_t)(200<<20) +  4)) {
+  } else if (a == ((uint32_t)(200<<20) +  4)) { // exponentiation 00
+    if (this->status00 != 0) {
+      result = pow(*((float*)&(this->base00)), *((float*)&(this->exponent00)));
+      this->base00 = *((uint32_t*)(&result));
+      this->status00 = 0;
+    }
+    d = bswap_32(this->status00);
+  } else if (a == ((uint32_t)(200<<20) +  8)) {
+    d = bswap_32(this->base00);
+  } else if (a == ((uint32_t)(200<<20) + 12)) {
+    d = bswap_32(this->exponent00);
+  } else if (a == ((uint32_t)(200<<20) + 16)) { // exponentiation 01
     if (this->status01 != 0) {
-      p_base = (float*)&(this->base01);
-      p_exponent = (float*)&(this->exponent01);
-      result = pow(*p_base, *p_exponent);
-      printf("%10.2f ^ %10.2f = %10.2f\n", *p_base, *p_exponent, result);
+      result = pow(*((float*)&(this->base01)), *((float*)&(this->exponent01)));
       this->base01 = *((uint32_t*)(&result));
       this->status01 = 0;
     }
     d = bswap_32(this->status01);
-  } else if (a == ((uint32_t)(200<<20) +  8)) {
+  } else if (a == ((uint32_t)(200<<20) + 20)) {
     d = bswap_32(this->base01);
-  } else if (a == ((uint32_t)(200<<20) + 12)) {
+  } else if (a == ((uint32_t)(200<<20) + 24)) {
     d = bswap_32(this->exponent01);
+  } else if (a == ((uint32_t)(200<<20) + 28)) { // exponentiation 02
+    if (this->status02 != 0) {
+      result = pow(*((float*)&(this->base02)), *((float*)&(this->exponent02)));
+      this->base02 = *((uint32_t*)(&result));
+      this->status02 = 0;
+    }
+    d = bswap_32(this->status02);
+  } else if (a == ((uint32_t)(200<<20) + 32)) {
+    d = bswap_32(this->base02);
+  } else if (a == ((uint32_t)(200<<20) + 36)) {
+    d = bswap_32(this->exponent02);
+  } else if (a == ((uint32_t)(200<<20) + 40)) { // exponentiation 03
+    if (this->status03 != 0) {
+      result = pow(*((float*)&(this->base03)), *((float*)&(this->exponent03)));
+      this->base03 = *((uint32_t*)(&result));
+      this->status03 = 0;
+    }
+    d = bswap_32(this->status03);
+  } else if (a == ((uint32_t)(200<<20) + 44)) {
+    d = bswap_32(this->base03);
+  } else if (a == ((uint32_t)(200<<20) + 48)) {
+    d = bswap_32(this->exponent03);
   }
   return SUCCESS;
 }
