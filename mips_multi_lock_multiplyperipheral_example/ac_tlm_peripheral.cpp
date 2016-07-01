@@ -50,10 +50,9 @@ ac_tlm_peripheral::ac_tlm_peripheral( sc_module_name module_name , int k ) :
   sc_module( module_name ),
   target_export("iport"),
   lock(0),
-  port1(0),
-  port2(0),
-  port3(0),
-  port4(0)
+  status01(0),
+  base01(0),
+  exponent01(0)
 {
     /// Binds target_export to the peripheral
     target_export( *this );
@@ -73,16 +72,17 @@ ac_tlm_peripheral::~ac_tlm_peripheral() {
 */
 ac_tlm_rsp_status ac_tlm_peripheral::writem( const uint32_t &a , const uint32_t &d )
 {
+  uint32_t temp = 0;
   if (a == ((uint32_t)(200<<20))) {
-    lock = bswap_32(d);
+    this->lock = bswap_32(d);
   } else if (a == ((uint32_t)(200<<20) +  4)) {
-    port1 = bswap_32(d);
+    this->status01 = bswap_32(d);
   } else if (a == ((uint32_t)(200<<20) +  8)) {
-    port2 = bswap_32(d);
+    this->base01 = bswap_32(d);
+    std::cout << "base01: " << *((float*)(&this->base01)) << std::endl;
   } else if (a == ((uint32_t)(200<<20) + 12)) {
-    port3 = bswap_32(d);
-  } else if (a == ((uint32_t)(200<<20) + 16)) {
-    port4 = bswap_32(d);
+    this->exponent01 = bswap_32(d);
+    std::cout << "exponent01: " << *((float*)(&this->exponent01)) << std::endl;
   }
   // std::cout << ((uint32_t)(200<<20)) << "addr: " << a << ", lock = " << (int)bswap_32(d) << std::endl;
   return SUCCESS;
@@ -97,17 +97,27 @@ ac_tlm_rsp_status ac_tlm_peripheral::writem( const uint32_t &a , const uint32_t 
 ac_tlm_rsp_status ac_tlm_peripheral::readm( const uint32_t &a , uint32_t &d )
 {
   // std::cout << ((uint32_t)(200<<20)) << "addr: " << a << ", lock: " << (int)lock << " -> lock = " << 1 << std::endl;
+
+  float *p_base = NULL, *p_exponent = NULL;
+  float result = 0.;
+
   if (a == ((uint32_t)(200<<20))) {
-    d = bswap_32(lock);
-    lock = 1;
+    d = bswap_32(this->lock);
+    this->lock = 1;
   } else if (a == ((uint32_t)(200<<20) +  4)) {
-    d = bswap_32(port1);
+    if (this->status01 != 0) {
+      p_base = (float*)&(this->base01);
+      p_exponent = (float*)&(this->exponent01);
+      result = pow(*p_base, *p_exponent);
+      printf("%10.2f ^ %10.2f = %10.2f\n", *p_base, *p_exponent, result);
+      this->base01 = *((uint32_t*)(&result));
+      this->status01 = 0;
+    }
+    d = bswap_32(this->status01);
   } else if (a == ((uint32_t)(200<<20) +  8)) {
-    d = bswap_32(port2);
+    d = bswap_32(this->base01);
   } else if (a == ((uint32_t)(200<<20) + 12)) {
-    d = bswap_32(port3);
-  } else if (a == ((uint32_t)(200<<20) + 16)) {
-    d = bswap_32(port4);
+    d = bswap_32(this->exponent01);
   }
   return SUCCESS;
 }

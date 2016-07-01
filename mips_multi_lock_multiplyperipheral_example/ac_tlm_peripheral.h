@@ -123,10 +123,11 @@ public:
 
 private:
   uint32_t lock;
-  uint32_t port1;
-  uint32_t port2;
-  uint32_t port3;
-  uint32_t port4;
+
+  uint32_t status01;
+  uint32_t base01;
+  uint32_t exponent01;
+
 };
 
 };
