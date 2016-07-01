@@ -45,9 +45,6 @@ void submain() {
   ++procCounter;
   ReleaseLock();
 
-  if (0 < procNumber)
-    return;
-
   /* AcquireLock(); */
   /* printf("procNumber address: %#10x\n", &procNumber);  */
   /* printf("procNumber %d\n ", procNumber); */
@@ -138,6 +135,10 @@ void submain() {
   AcquireLock();
   printf("Starting exponentiation %zu\n", procNumber);
   ReleaseLock();
+
+  if (0 < procNumber)
+    return;
+
   for (i = procNumber; i < N; i += 1) {
     p_result[i] = p_capital[i] * pow(p_interest[i], p_time[i]);
 

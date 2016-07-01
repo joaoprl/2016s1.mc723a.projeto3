@@ -41,6 +41,34 @@ using namespace mips_parms;
 static int processors_started = 0;
 #define DEFAULT_STACK_SIZE (256*1024)
 
+// y4k start
+int y4k_j = 0;
+int y4k_jal = 0;
+int y4k_jr = 0;
+int y4k_jalr = 0;
+int y4k_beq = 0;
+int y4k_bne = 0;
+int y4k_blez = 0;
+int y4k_bgtz = 0;
+int y4k_bltz = 0;
+int y4k_bgez = 0;
+int y4k_bltzal = 0;
+int y4k_bgezal = 0;
+
+int y4k_lb = 0;
+int y4k_lbu = 0;
+int y4k_lh = 0;
+int y4k_lhu = 0;
+int y4k_lw = 0;
+int y4k_lwl = 0;
+int y4k_lwr = 0;
+int y4k_sb = 0;
+int y4k_sh = 0;
+int y4k_sw = 0;
+int y4k_swl = 0;
+int y4k_swr = 0;
+// y4k end
+
 //!Generic instruction behavior method.
 void ac_behavior( instruction )
 { 
@@ -79,12 +107,41 @@ void ac_behavior(begin)
 void ac_behavior(end)
 {
   dbg_printf("@@@ end behavior @@@\n");
+
+  fprintf(stderr, "%20d y4k_lb\n", y4k_lb);
+  fprintf(stderr, "%20d y4k_lbu\n", y4k_lbu);
+  fprintf(stderr, "%20d y4k_lh\n", y4k_lh);
+  fprintf(stderr, "%20d y4k_lhu\n", y4k_lhu);
+  fprintf(stderr, "%20d y4k_lw\n", y4k_lw);
+  fprintf(stderr, "%20d y4k_lwl\n", y4k_lwl);
+  fprintf(stderr, "%20d y4k_lwr\n", y4k_lwr);
+  fprintf(stderr, "%20d y4k_sb\n", y4k_sb);
+  fprintf(stderr, "%20d y4k_sh\n", y4k_sh);
+  fprintf(stderr, "%20d y4k_sw\n", y4k_sw);
+  fprintf(stderr, "%20d y4k_swl\n", y4k_swl);
+  fprintf(stderr, "%20d y4k_swr\n", y4k_swr);
+
+  fprintf(stderr, "\n");
+
+  fprintf(stderr, "%20d y4k_j\n", y4k_j);
+  fprintf(stderr, "%20d y4k_jal\n", y4k_jal);
+  fprintf(stderr, "%20d y4k_jr\n", y4k_jr);
+  fprintf(stderr, "%20d y4k_jalr\n", y4k_jalr);
+  fprintf(stderr, "%20d y4k_beq\n", y4k_beq);
+  fprintf(stderr, "%20d y4k_bne\n", y4k_bne);
+  fprintf(stderr, "%20d y4k_blez\n", y4k_blez);
+  fprintf(stderr, "%20d y4k_bgtz\n", y4k_bgtz);
+  fprintf(stderr, "%20d y4k_bltz\n", y4k_bltz);
+  fprintf(stderr, "%20d y4k_bgez\n", y4k_bgez);
+  fprintf(stderr, "%20d y4k_bltzal\n", y4k_bltzal);
+  fprintf(stderr, "%20d y4k_bgezal\n", y4k_bgezal);
 }
 
 
 //!Instruction lb behavior method.
 void ac_behavior( lb )
 {
+  ++y4k_lb;
   char byte;
   dbg_printf("lb r%d, %d(r%d)\n", rt, imm & 0xFFFF, rs);
   byte = DM.read_byte(RB[rs]+ imm);
@@ -95,6 +152,7 @@ void ac_behavior( lb )
 //!Instruction lbu behavior method.
 void ac_behavior( lbu )
 {
+  ++y4k_lbu;
   unsigned char byte;
   dbg_printf("lbu r%d, %d(r%d)\n", rt, imm & 0xFFFF, rs);
   byte = DM.read_byte(RB[rs]+ imm);
@@ -105,6 +163,7 @@ void ac_behavior( lbu )
 //!Instruction lh behavior method.
 void ac_behavior( lh )
 {
+  ++y4k_lh;
   short int half;
   dbg_printf("lh r%d, %d(r%d)\n", rt, imm & 0xFFFF, rs);
   half = DM.read_half(RB[rs]+ imm);
@@ -115,6 +174,7 @@ void ac_behavior( lh )
 //!Instruction lhu behavior method.
 void ac_behavior( lhu )
 {
+  ++y4k_lhu;
   unsigned short int  half;
   half = DM.read_half(RB[rs]+ imm);
   RB[rt] = half ;
@@ -124,6 +184,7 @@ void ac_behavior( lhu )
 //!Instruction lw behavior method.
 void ac_behavior( lw )
 {
+  ++y4k_lw;
   dbg_printf("lw r%d, %d(r%d)\n", rt, imm & 0xFFFF, rs);
   RB[rt] = DM.read(RB[rs]+ imm);
   dbg_printf("Result = %#x\n", RB[rt]);
@@ -132,6 +193,7 @@ void ac_behavior( lw )
 //!Instruction lwl behavior method.
 void ac_behavior( lwl )
 {
+  ++y4k_lwl;
   dbg_printf("lwl r%d, %d(r%d)\n", rt, imm & 0xFFFF, rs);
   unsigned int addr, offset;
   ac_Uword data;
@@ -148,6 +210,7 @@ void ac_behavior( lwl )
 //!Instruction lwr behavior method.
 void ac_behavior( lwr )
 {
+  ++y4k_lwr;
   dbg_printf("lwr r%d, %d(r%d)\n", rt, imm & 0xFFFF, rs);
   unsigned int addr, offset;
   ac_Uword data;
@@ -164,6 +227,7 @@ void ac_behavior( lwr )
 //!Instruction sb behavior method.
 void ac_behavior( sb )
 {
+  ++y4k_sb;
   unsigned char byte;
   dbg_printf("sb r%d, %d(r%d)\n", rt, imm & 0xFFFF, rs);
   byte = RB[rt] & 0xFF;
@@ -174,6 +238,7 @@ void ac_behavior( sb )
 //!Instruction sh behavior method.
 void ac_behavior( sh )
 {
+  ++y4k_sh;
   unsigned short int half;
   dbg_printf("sh r%d, %d(r%d)\n", rt, imm & 0xFFFF, rs);
   half = RB[rt] & 0xFFFF;
@@ -184,6 +249,7 @@ void ac_behavior( sh )
 //!Instruction sw behavior method.
 void ac_behavior( sw )
 {
+  ++y4k_sw;
   dbg_printf("sw r%d, %d(r%d)\n", rt, imm & 0xFFFF, rs);
   DM.write(RB[rs] + imm, RB[rt]);
   dbg_printf("Result = %#x\n", RB[rt]);
@@ -192,6 +258,7 @@ void ac_behavior( sw )
 //!Instruction swl behavior method.
 void ac_behavior( swl )
 {
+  ++y4k_swl;
   dbg_printf("swl r%d, %d(r%d)\n", rt, imm & 0xFFFF, rs);
   unsigned int addr, offset;
   ac_Uword data;
@@ -208,6 +275,7 @@ void ac_behavior( swl )
 //!Instruction swr behavior method.
 void ac_behavior( swr )
 {
+  ++y4k_swr;
   dbg_printf("swr r%d, %d(r%d)\n", rt, imm & 0xFFFF, rs);
   unsigned int addr, offset;
   ac_Uword data;
@@ -554,6 +622,7 @@ void ac_behavior( mtlo )
 //!Instruction j behavior method.
 void ac_behavior( j )
 {
+  ++y4k_j;
   dbg_printf("j %d\n", addr);
   addr = addr << 2;
 #ifndef NO_NEED_PC_UPDATE
@@ -565,6 +634,7 @@ void ac_behavior( j )
 //!Instruction jal behavior method.
 void ac_behavior( jal )
 {
+  ++y4k_jal;
   dbg_printf("jal %d\n", addr);
   // Save the value of PC + 8 (return address) in $ra ($31) and
   // jump to the address given by PC(31...28)||(addr<<2)
@@ -583,6 +653,7 @@ void ac_behavior( jal )
 //!Instruction jr behavior method.
 void ac_behavior( jr )
 {
+  ++y4k_jr;
   dbg_printf("jr r%d\n", rs);
   // Jump to the address stored on the register reg[RS]
   // It must also flush the instructions that were loaded into the pipeline
@@ -595,6 +666,7 @@ void ac_behavior( jr )
 //!Instruction jalr behavior method.
 void ac_behavior( jalr )
 {
+  ++y4k_jalr;
   dbg_printf("jalr r%d, r%d\n", rd, rs);
   // Save the value of PC + 8(return address) in rd and
   // jump to the address given by [rs]
@@ -613,6 +685,7 @@ void ac_behavior( jalr )
 //!Instruction beq behavior method.
 void ac_behavior( beq )
 {
+  ++y4k_beq;
   dbg_printf("beq r%d, r%d, %d\n", rt, rs, imm & 0xFFFF);
   if( RB[rs] == RB[rt] ){
 #ifndef NO_NEED_PC_UPDATE
@@ -625,6 +698,7 @@ void ac_behavior( beq )
 //!Instruction bne behavior method.
 void ac_behavior( bne )
 {	
+  ++y4k_bne;
   dbg_printf("bne r%d, r%d, %d\n", rt, rs, imm & 0xFFFF);
   if( RB[rs] != RB[rt] ){
 #ifndef NO_NEED_PC_UPDATE
@@ -637,6 +711,7 @@ void ac_behavior( bne )
 //!Instruction blez behavior method.
 void ac_behavior( blez )
 {
+  ++y4k_blez;
   dbg_printf("blez r%d, %d\n", rs, imm & 0xFFFF);
   if( (RB[rs] == 0 ) || (RB[rs]&0x80000000 ) ){
 #ifndef NO_NEED_PC_UPDATE
@@ -649,6 +724,7 @@ void ac_behavior( blez )
 //!Instruction bgtz behavior method.
 void ac_behavior( bgtz )
 {
+  ++y4k_bgtz;
   dbg_printf("bgtz r%d, %d\n", rs, imm & 0xFFFF);
   if( !(RB[rs] & 0x80000000) && (RB[rs]!=0) ){
 #ifndef NO_NEED_PC_UPDATE
@@ -661,6 +737,7 @@ void ac_behavior( bgtz )
 //!Instruction bltz behavior method.
 void ac_behavior( bltz )
 {
+  ++y4k_bltz;
   dbg_printf("bltz r%d, %d\n", rs, imm & 0xFFFF);
   if( RB[rs] & 0x80000000 ){
 #ifndef NO_NEED_PC_UPDATE
@@ -673,6 +750,7 @@ void ac_behavior( bltz )
 //!Instruction bgez behavior method.
 void ac_behavior( bgez )
 {
+  ++y4k_bgez;
   dbg_printf("bgez r%d, %d\n", rs, imm & 0xFFFF);
   if( !(RB[rs] & 0x80000000) ){
 #ifndef NO_NEED_PC_UPDATE
@@ -685,6 +763,7 @@ void ac_behavior( bgez )
 //!Instruction bltzal behavior method.
 void ac_behavior( bltzal )
 {
+  ++y4k_bltzal;
   dbg_printf("bltzal r%d, %d\n", rs, imm & 0xFFFF);
   RB[Ra] = ac_pc+4; //ac_pc is pc+4, we need pc+8
   if( RB[rs] & 0x80000000 ){
@@ -699,6 +778,7 @@ void ac_behavior( bltzal )
 //!Instruction bgezal behavior method.
 void ac_behavior( bgezal )
 {
+  ++y4k_bgezal;
   dbg_printf("bgezal r%d, %d\n", rs, imm & 0xFFFF);
   RB[Ra] = ac_pc+4; //ac_pc is pc+4, we need pc+8
   if( !(RB[rs] & 0x80000000) ){
