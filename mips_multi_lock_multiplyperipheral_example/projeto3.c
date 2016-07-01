@@ -40,6 +40,10 @@ void submain() {
   /* printf("procNumber %d\n ", procNumber); */
   /* ReleaseLock(); */
 
+  uint32_t i = 0;
+  float a = 0., b = 0., c = 0., d = 0., e = 0., f = 0.;
+
+  volatile uint32_t status = 0;
   volatile uint32_t *p_status = NULL;
   volatile float *p_base = NULL, *p_exponent = NULL;
 
@@ -48,15 +52,41 @@ void submain() {
     p_base = (volatile float*)p_base00;
     p_exponent = (volatile float*)p_exponent00;
 
-    *p_base = 1.7;
-    *p_exponent = 4.1;
-    *p_status = 1;
+    /* *p_base = 1.7; */
+    /* *p_exponent = 4.1; */
+    /* *p_status = 1; */
+    /* AcquireLock(); */
+    /* printf("procNumber: \t %zu\n", procNumber); */
+    /* printf("base: \t %10.2f, \t exponent: %10.2f\n", *p_base, *p_exponent); */
+    /* printf("status: \t %d\n", *p_status); */
+    /* printf("result: \t %10.2f\n", *p_base); */
+    /* printf("expected: \t %10.2f\n", pow(1.7, 4.1)); */
+
+    for (i = 0; i < 5000; ++i) {
+      a = 1. + .01 * ((float)i / (float)5000);
+      b = 36. * ((float)i / (float)5000);
+      f = 50000. * ((float)i / (float)5000);
+
+      c = f * pow(a, b);
+      d += c;
+      /* AcquireLock(); */
+      /* printf("%10.2f ", c); */
+      /* ReleaseLock(); */
+
+      *p_base = a;
+      *p_exponent = b;
+      *p_status = 1;
+      status = *p_status;
+      c = f * (*p_base);
+      e += c;
+      /* AcquireLock(); */
+      /* printf("%10.2f\n", c); */
+      /* ReleaseLock(); */
+    }
     AcquireLock();
-    printf("procNumber: \t %zu\n", procNumber);
-    printf("base: \t %10.2f, \t exponent: %10.2f\n", *p_base, *p_exponent);
-    printf("status: \t %d\n", *p_status);
-    printf("result: \t %10.2f\n", *p_base);
-    printf("expected: \t %10.2f\n", pow(1.7, 4.1));
+    printf("\n");
+    printf("d: %10.2f\n", d);
+    printf("e: %10.2f\n", e);
     ReleaseLock();
   }
 }

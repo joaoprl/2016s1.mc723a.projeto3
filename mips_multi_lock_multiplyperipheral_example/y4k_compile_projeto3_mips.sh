@@ -8,4 +8,4 @@ Y4KPATH="/home/ec2014/ra033324/y4k/classes/mc723a/git_projeto3/mips_multi_lock_m
 
 echo
 echo "mips-newlib-elf-gcc -specs=archc ${Y4KPATH}/projeto3.c -o ${Y4KPATH}/projeto3.mips"
-mips-newlib-elf-gcc -specs=archc -O3 ${Y4KPATH}/projeto3.c -o ${Y4KPATH}/projeto3.mips
+mips-newlib-elf-gcc -specs=archc -O3 ${Y4KPATH}/projeto3.c -o ${Y4KPATH}/projeto3.mips -lm
