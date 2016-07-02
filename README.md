@@ -87,7 +87,7 @@ A primeira coluna se refere a uma execução do programa exatamente igual às de
 
 Nas contagens acima os ciclos dos quatro _cores_ são computados separadamente e somados, de forma que a paralelização quase não terá impacto no valor aqui retratado; mesmo assim, é curioso perceber que há uma ligeira redução no número total de ciclos consumidos, o que provavelmente se deve a uma simplificação no número de operações realizadas quando os laços são divididos em quatro seções separadas.  
 
-No entanto já é possível analisar a diferença entre o número de ciclos da seção serial do programa e da execução do programa não serial com e sem o uso do periférico: comparado à execução sem o periférico (~2.72B ciclos), a parte serial de leitura e escrita dos arquivos consome quase 50% dos ciclos (1.45B).  
+No entanto já é possível analisar a diferença entre o número de ciclos da seção serial do programa e da execução do programa completo com e sem o uso do periférico: comparado à execução sem o periférico (~2.72B ciclos), a parte serial de leitura e escrita dos arquivos consome quase 50% dos ciclos (1.45B).  
 O uso do periférico reduz em ~32% o número de ciclos consumidos total e em ~69% o número de ciclos consumidos na parte paralelizável, mesmo com a multiplicação de ponto flutuante do montante inicial pela taxa de retorno total sendo emulada na arquitetura mips; já percebe-se o ganho de performance significativo gerado pelo periférico.
 
 #### Contagem de ciclos estritamente da parte paralelizável da execução em cada _core_
