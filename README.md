@@ -51,6 +51,14 @@ Considerando 4 ciclos para cada escrita/leitura feita pela CPU no periférico, c
 
 ## Resultados
 
+Antes de mais nada é fundamental averiguar que o resultado em todas as abordagens é consistente.
+
+O capital inicial total do dez mil investimentos (com valores individuais entre $100 e $500,000) avaliados é de $2,471,685,888; o resultado total dos mesmos (com taxas de retorno entre 0.1% e 1% e períodos entre 1 e 36 meses), foi calculado em $2,743,482,624. Isso representa cerca de 11% de rentabilidade total, o que está dentro do esperado para os valores utilizados.  
+É claro que esses valores foram checado em outros programas e todos os resultados globais são consistentes entre as diferentes arquiteturas.
+
+Entretanto, mesmo o valor final sendo o esperado, curiosamente há poucas divergências de centavos espalhadas entre os valores finais de investimentos individuais nas abordagens que utilizam o periférico ([y4k_result_1per0par.txt](mips_multi_lock_multiplyperipheral_example/y4k_result_1per0par.txt) e [y4k_result_1per1par.txt](mips_multi_lock_multiplyperipheral_example/y4k_result_1per1par.txt)) e nas abordagens que não o utilizam ([y4k_result_0per0par.txt](mips_multi_lock_multiplyperipheral_example/y4k_result_0per0par.txt) e [y4k_result_0per1par.txt](mips_multi_lock_multiplyperipheral_example/y4k_result_0per1par.txt)).
+
+
 Nas tabelas abaixo, foram considerados 10 ciclos por instrução de acesso à memória propriamente dita, 3 ciclos por instrução de _jump_/_branch_ e 1 ciclo para outros tipos; as contagens para estes três tipos de instruções não consideram aquelas utilizadas para interagir com o periférico, que são analisadas separadamente (como descrito acima) considerando 32 ciclos para cada uma das dez mil operações de exponenciação.  
 
 #### Contagem total de ciclos, somando o número de ciclos consumidos pelos quatro _cores_
