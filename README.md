@@ -47,7 +47,7 @@ Cada operação de exponenciação emulada em ponto flutuante ocupa o surpreende
 
 O cálculo acima assume que o acesso à pequena memória ROM do periférico consome apenas 2 ciclos e todas operações de multiplicação de ponto flutuante consomem apenas 1 ciclo.  
 
-Considerando 4 ciclos para cada escrita/leitura feita pela CPU no periférico, chega-se então a 12 ciclos para cada input (escrita de _status_, _base_, e _exponent_), o máximo de 16 ciclos aguardando o periférico terminar (a CPU faz três leituras em que a exponenciação ainda não acabou e mais uma para verificar sucesso), e mais 4 ciclos lendo o resultado. Desta forma cada uma das dez mil exponenciações corresponde a 32 ciclos gastos aguardando o periférico. Na simulação, isso corresponderá a 5 instruções de _load_ por exponenciação executadas pela CPU.
+Considerando 4 ciclos para cada escrita/leitura feita pela CPU no periférico, chega-se então a 12 ciclos para cada input (escrita de _status_, _base_, e _exponent_), o máximo de 16 ciclos aguardando o periférico terminar (a CPU faz três leituras em que a exponenciação ainda não acabou e mais uma para verificar sucesso), e mais 4 ciclos lendo o resultado da exponenciação. Desta forma cada uma das dez mil exponenciações corresponde a 32 ciclos gastos aguardando o periférico. Na simulação, isso corresponderá a 5 instruções de _load_ por exponenciação executadas pela CPU.
 
 ## Resultados
 
