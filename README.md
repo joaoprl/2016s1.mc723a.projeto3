@@ -67,7 +67,7 @@ A primeira coluna se refere a uma execução do programa exatamente igual às de
 Nas contagens acima os ciclos dos quatro _cores_ são computados separadamente e somados, de forma que a separação da execução em quatro cores quase não terá impacto neste número de ciclos consumidos; mesmo assim, é curioso perceber que há uma ligeira redução no número total de ciclos consumidos, o que provavelmente se deve a uma simplificação no número de operações realizadas quando os laços são divididos em quatro seções separadas.  
 
 No entanto já é possível analisar a diferença entre o número de ciclos da seção serial do programa e da execução do programa não serial com e sem o uso do periférico: comparado à execução sem o periférico (~2.72B ciclos), a parte serial de leitura e escrita dos arquivos consome quase 50% dos ciclos (1.45B).  
-O uso do periférico reduz em ~32% o número total de ciclos consumidos e em ~85% o número de ciclos consumidos na parte paralelizável, mesmo com a multiplicação de ponto flutuante do montante inicial pela taxa de retorno total sendo emulada na arquitetura mips; já percebe-se o ganho de performance significativo gerado pelo periférico.
+O uso do periférico reduz em ~32% o número de ciclos consumidos total e em ~69% o número de ciclos consumidos na parte paralelizável, mesmo com a multiplicação de ponto flutuante do montante inicial pela taxa de retorno total sendo emulada na arquitetura mips; já percebe-se o ganho de performance significativo gerado pelo periférico.
 
 #### Contagem de ciclos estritamente da parte paralelizável da execução em cada _core_
 
@@ -79,7 +79,12 @@ O uso do periférico reduz em ~32% o número total de ciclos consumidos e em ~85
 |ciclos em instruções de CPU|1,271,592,374|317,889,271|394,201,292|98,518,256|
 |ciclos interagindo com o periférico|0|0|320,000|80,000|
 |total de ciclos|1,271,592,374|317,889,271|394,521,292|98,598,256|
-||1.000000|0.249993|0.310258|0.077539|
+
+Na tabela acima são contadas apenas as instruções e ciclos consumidos em **cada** _core_ **estritamente** na parte paralelizável da execução do programa. Este cálculo foi aproximado meramente subtraindo-se os valores da parte serial da execução e dividindo o resultado pelo número de _cores_ utilizados.  
+
+Aqui ficam patentes os ganhos na seção de execução que efetivamente realiza as operações de exponenciação e multiplicação: a paralelização do código obviamente irá reduzir o tempo desta seção em ~75%, enquanto confirma-se que o periférico realmente possibilita uma redução de ~69%. Utilizando os dois em conjunto, a redução nesta seção paralelizável chega a ~92%.  
+
+#### Contagem de ciclos para que a CPU complete a execução do programa
 
 | |sem periférico, sem paralelismo|sem periférico, com paralelismo|com periférico, sem paralelismo|com periférico, com paralelismo|
 |:---|---:|---:|---:|---:|
@@ -89,7 +94,11 @@ O uso do periférico reduz em ~32% o número total de ciclos consumidos e em ~85
 |ciclos em instruções de CPU|2,723,180,964|1,769,477,861|1,845,789,882|1,550,106,846|
 |ciclos interagindo com o periférico|0|0|320,000|80,000|
 |total de ciclos|2,723,180,964|1,769,477,861|1,846,109,882|1,550,186,846|
-||1.000000|0.649783|0.677924|0.569256|
+
+É claro que o programa não se resume a parte das operações de interesse, há todo o _overhead_ de execução além da leitura e escrita de arquivos que compõe a parte não paralelizável. Para estimar o tempo de execução para que o programa seja encerrado, foram somados os valores desta parte serial com os valores referentes a apenas um _core_ (acima), o que reflete adequadamente a forma como o programa funciona (apenas um _core_ executa a parte serial e a parte paralelizável é dividida entre os quatro).
+
+O resultado final é uma redução do número ciclos (do _core_ com maior carga) de ~35% somente com a paralelização, ~32% somente com o periférico, e ~43% utilizando ambos os recursos.  
+Estes valores, comparados com a redução muito mais dramática na parte paralelizável da execução, mostram como o _overhead_ de execução e a parte não paralelizável podem limitar os ganhos nas seções de maior interesse do programa. É claro que as limitações da arquitetura MIPS agravam este problema, além do que o uso de um número maior de operações de exponenciação e multiplicação (dez mil é um número pequeno, apesar da demora de execução do simulador) reduziriam essa diferença no ganho de _performance_.
 
 
 ## Referências
