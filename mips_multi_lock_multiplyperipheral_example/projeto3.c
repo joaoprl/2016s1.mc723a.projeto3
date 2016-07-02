@@ -1,3 +1,8 @@
+/* #define WITHOUT_PERIPHERAL_WITHOUT_PARALLELISM */
+/* #define WITH_PERIPHERAL_WITHOUT_PARALLELISM */
+/* #define WITHOUT_PERIPHERAL_WITH_PARALLELISM */
+/* #define WITH_PERIPHERAL_WITH_PARALLELISM */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -53,9 +58,6 @@ void submain() {
   FILE *p_file = NULL;
   uint32_t i = 0, n = 0;
   float total_capital = 0., total_result = 0.;
-  /* float interest = 0.; */
-  /* float time = 0.; */
-  /* float capital = 0.; */
 
   volatile uint32_t status = 0;
   volatile uint32_t *p_status = NULL;
@@ -136,18 +138,42 @@ void submain() {
   printf("Starting exponentiation %zu\n", procNumber);
   ReleaseLock();
 
-  /* if (0 < procNumber) */
-  /*   return; */
+#ifdef WITHOUT_PERIPHERAL_WITHOUT_PARALLELISM
+  if (procNumber == 0) {
+    for (i = procNumber; i < N; i += 1) {
+      p_result[i] = p_capital[i] * pow(p_interest[i], p_time[i]);
+    }
+  }
+#endif
 
-  /* for (i = procNumber; i < N; i += 4) { */
-  /*   /\* p_result[i] = p_capital[i] * pow(p_interest[i], p_time[i]); *\/ */
+#ifdef WITHOUT_PERIPHERAL_WITH_PARALLELISM
+  for (i = procNumber; i < N; i += 4) {
+    p_result[i] = p_capital[i] * pow(p_interest[i], p_time[i]);
+  }
+#endif
 
-  /*   *p_base = p_interest[i]; */
-  /*   *p_exponent = p_time[i]; */
-  /*   *p_status = 1; */
-  /*   while(*p_status != 0); */
-  /*   p_result[i] = p_capital[i] * (*p_base); */
-  /* } */
+#ifdef WITH_PERIPHERAL_WITHOUT_PARALLELISM
+  if (procNumber == 0) {
+    for (i = procNumber; i < N; i += 1) {
+      *p_base = p_interest[i];
+      *p_exponent = p_time[i];
+      *p_status = 1;
+      while(*p_status != 0);
+      p_result[i] = p_capital[i] * (*p_base);
+    }
+  }
+#endif
+
+#ifdef WITH_PERIPHERAL_WITH_PARALLELISM
+  for (i = procNumber; i < N; i += 4) {
+    *p_base = p_interest[i];
+    *p_exponent = p_time[i];
+    *p_status = 1;
+    while(*p_status != 0);
+    p_result[i] = p_capital[i] * (*p_base);
+  }
+#endif
+
   p_finished[procNumber] = 1;
 
   if (procNumber == 0) {
@@ -169,9 +195,23 @@ void submain() {
     printf("Writing output files and calculating total values.\n");
     ReleaseLock();
 
-    /* p_file = fopen("./y4k_result0.txt", "w"); */
-    /* p_file = fopen("./y4k_result1.txt", "w"); */
-    p_file = fopen("./y4k_result2.txt", "w");
+    p_file = NULL;
+#ifdef WITHOUT_PERIPHERAL_WITHOUT_PARALLELISM
+    p_file = fopen("./y4k_result_0per0par.txt", "w");
+#endif
+#ifdef WITHOUT_PERIPHERAL_WITH_PARALLELISM
+    p_file = fopen("./y4k_result_0per1par.txt", "w");
+#endif
+#ifdef WITH_PERIPHERAL_WITHOUT_PARALLELISM
+    p_file = fopen("./y4k_result_1per0par.txt", "w");
+#endif
+#ifdef WITH_PERIPHERAL_WITH_PARALLELISM
+    p_file = fopen("./y4k_result_1per1par.txt", "w");
+#endif
+    if (p_file == NULL) {
+      p_file = fopen("./y4k_result_onlyserial.txt", "w");
+    }
+
     fprintf(p_file, "%d\n", n);
     for (i = 0; i < N; ++i) {
       total_result += p_result[i];
@@ -192,48 +232,10 @@ void submain() {
     p_capital = NULL;
     free(p_result);
     p_result = NULL;
-
-  /*   p_status = p_status00; */
-  /*   p_base = (volatile float*)p_base00; */
-  /*   p_exponent = (volatile float*)p_exponent00; */
-
-  /*   /\* *p_base = 1.7; *\/ */
-  /*   /\* *p_exponent = 4.1; *\/ */
-  /*   /\* *p_status = 1; *\/ */
-  /*   /\* AcquireLock(); *\/ */
-  /*   /\* printf("procNumber: \t %zu\n", procNumber); *\/ */
-  /*   /\* printf("base: \t %10.2f, \t exponent: %10.2f\n", *p_base, *p_exponent); *\/ */
-  /*   /\* printf("status: \t %d\n", *p_status); *\/ */
-  /*   /\* printf("result: \t %10.2f\n", *p_base); *\/ */
-  /*   /\* printf("expected: \t %10.2f\n", pow(1.7, 4.1)); *\/ */
-
-  /*   for (i = 0; i < 5000; ++i) { */
-  /*     a = 1. + .01 * ((float)i / (float)5000); */
-  /*     b = 36. * ((float)i / (float)5000); */
-  /*     f = 50000. * ((float)i / (float)5000); */
-
-  /*     c = f * pow(a, b); */
-  /*     d += c; */
-  /*     /\* AcquireLock(); *\/ */
-  /*     /\* printf("%10.2f ", c); *\/ */
-  /*     /\* ReleaseLock(); *\/ */
-
-  /*     *p_base = a; */
-  /*     *p_exponent = b; */
-  /*     *p_status = 1; */
-  /*     status = *p_status; */
-  /*     c = f * (*p_base); */
-  /*     e += c; */
-  /*     /\* AcquireLock(); *\/ */
-  /*     /\* printf("%10.2f\n", c); *\/ */
-  /*     /\* ReleaseLock(); *\/ */
-  /*   } */
-  /*   AcquireLock(); */
-  /*   printf("\n"); */
-  /*   printf("d: %10.2f\n", d); */
-  /*   printf("e: %10.2f\n", e); */
-  /*   ReleaseLock(); */
   }
+  AcquireLock();
+  printf("Finishing %zu\n", procNumber);
+  ReleaseLock();
 }
 
 int main(int ac, char *av[]){

@@ -67,11 +67,19 @@ int y4k_sh = 0;
 int y4k_sw = 0;
 int y4k_swl = 0;
 int y4k_swr = 0;
+
+long int y4k_jb = 0;
+long int y4k_mem = 0;
+long int y4k_total = 0;
+long int y4k_others = 0;
+long int y4k_cycles = 0;
+long int y4k_cycles_minus_5e6_plus_32e4 = 0;
 // y4k end
 
 //!Generic instruction behavior method.
 void ac_behavior( instruction )
-{ 
+{
+  ++y4k_total;
   dbg_printf("----- PC=%#x ----- %lld\n", (int) ac_pc, ac_instr_counter);
   //  dbg_printf("----- PC=%#x NPC=%#x ----- %lld\n", (int) ac_pc, (int)npc, ac_instr_counter);
 #ifndef NO_NEED_PC_UPDATE
@@ -108,33 +116,48 @@ void ac_behavior(end)
 {
   dbg_printf("@@@ end behavior @@@\n");
 
-  fprintf(stderr, "%20d y4k_lb\n", y4k_lb);
-  fprintf(stderr, "%20d y4k_lbu\n", y4k_lbu);
-  fprintf(stderr, "%20d y4k_lh\n", y4k_lh);
-  fprintf(stderr, "%20d y4k_lhu\n", y4k_lhu);
-  fprintf(stderr, "%20d y4k_lw\n", y4k_lw);
-  fprintf(stderr, "%20d y4k_lwl\n", y4k_lwl);
-  fprintf(stderr, "%20d y4k_lwr\n", y4k_lwr);
-  fprintf(stderr, "%20d y4k_sb\n", y4k_sb);
-  fprintf(stderr, "%20d y4k_sh\n", y4k_sh);
-  fprintf(stderr, "%20d y4k_sw\n", y4k_sw);
-  fprintf(stderr, "%20d y4k_swl\n", y4k_swl);
-  fprintf(stderr, "%20d y4k_swr\n", y4k_swr);
+  y4k_jb = y4k_j + y4k_jal + y4k_jr + y4k_jalr + y4k_beq + y4k_bne + y4k_blez + y4k_bgtz + y4k_bltz + y4k_bgez + y4k_bltzal + y4k_bgezal;
+  y4k_mem = y4k_lb + y4k_lbu + y4k_lh + y4k_lhu + y4k_lw + y4k_lwl + y4k_lwr + y4k_sb + y4k_sh + y4k_sw + y4k_swl + y4k_swr;
+  y4k_others = y4k_total - y4k_jb - y4k_mem;
+  y4k_cycles = 10 * y4k_mem + 3 * y4k_jb + 1 * y4k_others;
+  y4k_cycles_minus_5e6_plus_32e4 = y4k_cycles - 5 * 10000 * 10 + 32 * 10000;
 
-  fprintf(stderr, "\n");
+  // fprintf(stderr, "%20d y4k_lb\n", y4k_lb);
+  // fprintf(stderr, "%20d y4k_lbu\n", y4k_lbu);
+  // fprintf(stderr, "%20d y4k_lh\n", y4k_lh);
+  // fprintf(stderr, "%20d y4k_lhu\n", y4k_lhu);
+  // fprintf(stderr, "%20d y4k_lw\n", y4k_lw);
+  // fprintf(stderr, "%20d y4k_lwl\n", y4k_lwl);
+  // fprintf(stderr, "%20d y4k_lwr\n", y4k_lwr);
+  // fprintf(stderr, "%20d y4k_sb\n", y4k_sb);
+  // fprintf(stderr, "%20d y4k_sh\n", y4k_sh);
+  // fprintf(stderr, "%20d y4k_sw\n", y4k_sw);
+  // fprintf(stderr, "%20d y4k_swl\n", y4k_swl);
+  // fprintf(stderr, "%20d y4k_swr\n", y4k_swr);
 
-  fprintf(stderr, "%20d y4k_j\n", y4k_j);
-  fprintf(stderr, "%20d y4k_jal\n", y4k_jal);
-  fprintf(stderr, "%20d y4k_jr\n", y4k_jr);
-  fprintf(stderr, "%20d y4k_jalr\n", y4k_jalr);
-  fprintf(stderr, "%20d y4k_beq\n", y4k_beq);
-  fprintf(stderr, "%20d y4k_bne\n", y4k_bne);
-  fprintf(stderr, "%20d y4k_blez\n", y4k_blez);
-  fprintf(stderr, "%20d y4k_bgtz\n", y4k_bgtz);
-  fprintf(stderr, "%20d y4k_bltz\n", y4k_bltz);
-  fprintf(stderr, "%20d y4k_bgez\n", y4k_bgez);
-  fprintf(stderr, "%20d y4k_bltzal\n", y4k_bltzal);
-  fprintf(stderr, "%20d y4k_bgezal\n", y4k_bgezal);
+  // fprintf(stderr, "\n");
+
+  // fprintf(stderr, "%20d y4k_j\n", y4k_j);
+  // fprintf(stderr, "%20d y4k_jal\n", y4k_jal);
+  // fprintf(stderr, "%20d y4k_jr\n", y4k_jr);
+  // fprintf(stderr, "%20d y4k_jalr\n", y4k_jalr);
+  // fprintf(stderr, "%20d y4k_beq\n", y4k_beq);
+  // fprintf(stderr, "%20d y4k_bne\n", y4k_bne);
+  // fprintf(stderr, "%20d y4k_blez\n", y4k_blez);
+  // fprintf(stderr, "%20d y4k_bgtz\n", y4k_bgtz);
+  // fprintf(stderr, "%20d y4k_bltz\n", y4k_bltz);
+  // fprintf(stderr, "%20d y4k_bgez\n", y4k_bgez);
+  // fprintf(stderr, "%20d y4k_bltzal\n", y4k_bltzal);
+  // fprintf(stderr, "%20d y4k_bgezal\n", y4k_bgezal);
+
+  // fprintf(stderr, "\n");
+
+  fprintf(stderr, "%20ld y4k_total\n", y4k_total);
+  fprintf(stderr, "%20ld y4k_jb\n", y4k_jb);
+  fprintf(stderr, "%20ld y4k_mem\n", y4k_mem);
+  fprintf(stderr, "%20ld y4k_others\n", y4k_others);
+  fprintf(stderr, "%20ld y4k_cycles\n", y4k_cycles);
+  fprintf(stderr, "%20ld y4k_cycles_minus_5e6_plus_32e4\n", y4k_cycles_minus_5e6_plus_32e4);
 }
 
 
