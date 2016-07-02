@@ -62,7 +62,9 @@ Entretanto, mesmo o valor final sendo o esperado, curiosamente há algumas (pouc
 
 Em todas as simulações de arquitetura foi utilizada a função `pow` da biblioteca `math.h`, entretanto nos casos sem o periférico a operação é adaptada para a arquitetura MIPS que não dispõem de unidades aritméticas para operações com ponto flutuante: acredita-se que essa é a fonte da divergência.  
 
-De fato, as abordagens com o periférico geram o resultado mais próximo do valor correto, mas mesmo assim o valor ainda não é o correto. Esta imprecisão ocorre devido o uso de `floats`, que são representados apenas com 32 bits divididos entre mantissa e expoente, tal que a precisão será necessáriamente limitada. Idealmente seriam utilizados `doubles` para esta categoria de problema, mas como a simulação parte da arquitetura MIPS, utilizar este tipo de variável aumentaria ainda mais a complexidade da simulação, quando os objetivos de estudo de arquitetura já estão sendo suficientemente atigidos com o uso de `floats`; assim considera-se que as diferentes abordagens são suficientemente consistentes e sem bugs óbvios de implementação.  
+De fato, as abordagens com o periférico geram o resultado mais próximo do valor correto, mas mesmo assim o valor ainda não é o correto. Esta imprecisão ocorre devido o uso de `floats`, que são representados apenas com 32 bits divididos entre mantissa e expoente, tal que a precisão será necessáriamente limitada. Idealmente seriam utilizados `doubles` para esta categoria de problema, mas como a simulação parte da arquitetura MIPS, utilizar este tipo de variável aumentaria ainda mais a complexidade da simulação.  
+
+Em última instância, os objetivos de estudo de arquitetura já estão sendo suficientemente atigidos com o uso de `floats`, de forma que pode-se considerar que as diferentes abordagens são suficientemente consistentes e não há bugs óbvios de implementação entre as mesmas.  
 
 ### Performance
 
