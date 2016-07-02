@@ -128,7 +128,7 @@ Estes valores, comparados com a redução muito mais dramática na parte paralel
 É claro que as limitações da arquitetura MIPS agravam este problema, consumindo um número extremamente elevado de ciclos para ler e escrever arquivos.  
 Além disso, dez mil operações de exponenciação/multiplicação é um número muito pequeno; seria interessante aumentar esse número em várias ordens de grandeza, mas isso tornaria o tempo de simulação impraticável.
 
-Assim conclui-se que a parte mais relevante dos resultados é efetivamente a análise da seção paralelizável, em que foi demonstrado que mesmo em arquiteturas simples como a MIPS, a adição de um periférico adequado para as demandas de processamento e o aumento do número de _cores_ podem reduzir drasticamente o tempo de execução de programas, especialmente em ambientes como o bancário em que boa parte do processamento é realizado em _batches_.  
+Assim conclui-se que a parte mais relevante dos resultados é efetivamente a análise da seção paralelizável. Nesta foi demonstrado que, mesmo em arquiteturas simples como a MIPS, a adição de um periférico adequado para as demandas de processamento e o aumento do número de _cores_ podem reduzir drasticamente o tempo de execução de programas. Isso é especialmente relevante em ambientes como o bancário, em que boa parte do processamento é realizado em _batches_.  
 
 
 ## Referências
