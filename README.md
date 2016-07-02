@@ -62,6 +62,8 @@ Nas tabelas abaixo, foram considerados 10 ciclos por instrução de acesso à me
 |ciclos interagindo com o periférico|0|0|0|320,000|320,000|
 |total de ciclos|1,451,588,590|2,723,180,964|2,723,145,675|1,846,109,882|1,845,981,614|
 
+![](charts/0.png)
+
 A primeira coluna se refere a uma execução do programa exatamente igual às demais, exceto que não se realiza nenhuma operação de exponenciação. Desta forma pode-se calcular qual a carga gerada pela parte serial não paralelizável do código, informação que será necessária para calcular posteriormente o impacto da paralelização.
 
 Nas contagens acima os ciclos dos quatro _cores_ são computados separadamente e somados, de forma que a separação da execução em quatro cores quase não terá impacto neste número de ciclos consumidos; mesmo assim, é curioso perceber que há uma ligeira redução no número total de ciclos consumidos, o que provavelmente se deve a uma simplificação no número de operações realizadas quando os laços são divididos em quatro seções separadas.  
@@ -80,6 +82,8 @@ O uso do periférico reduz em ~32% o número de ciclos consumidos total e em ~69
 |ciclos interagindo com o periférico|0|0|320,000|80,000|
 |total de ciclos|1,271,592,374|317,889,271|394,521,292|98,598,256|
 
+![](charts/1.png)
+
 Na tabela acima são contadas apenas as instruções e ciclos consumidos em **cada** _core_ **estritamente** na parte paralelizável da execução do programa. Este cálculo foi aproximado meramente subtraindo-se os valores da parte serial da execução e dividindo o resultado pelo número de _cores_ utilizados.  
 
 Aqui ficam patentes os ganhos na seção de execução que efetivamente realiza as operações de exponenciação e multiplicação: a paralelização do código obviamente irá reduzir o tempo desta seção em ~75%, enquanto confirma-se que o periférico realmente possibilita uma redução de ~69%. Utilizando os dois em conjunto, a redução nesta seção paralelizável chega a ~92%.  
@@ -94,6 +98,8 @@ Aqui ficam patentes os ganhos na seção de execução que efetivamente realiza 
 |ciclos em instruções de CPU|2,723,180,964|1,769,477,861|1,845,789,882|1,550,106,846|
 |ciclos interagindo com o periférico|0|0|320,000|80,000|
 |total de ciclos|2,723,180,964|1,769,477,861|1,846,109,882|1,550,186,846|
+
+![](charts/2.png)
 
 É claro que o programa não se resume a parte das operações de interesse, há todo o _overhead_ de execução além da leitura e escrita de arquivos que compõe a parte não paralelizável. Para estimar o tempo de execução para que o programa seja encerrado, foram somados os valores desta parte serial com os valores referentes a apenas um _core_ (acima), o que reflete adequadamente a forma como o programa funciona (apenas um _core_ executa a parte serial e a parte paralelizável é dividida entre os quatro).
 
