@@ -53,14 +53,14 @@ Nas tabelas abaixo, foram considerados 10 ciclos por instrução de acesso à me
 
 #### Contagem total de ciclos, somando o número de ciclos consumidos pelos quatro _cores_
 
-| |serial, sem exponenciações|sem periférico, sem paralelismo|sem periférico, com paralelismo|com periférico, sem paralelismo|com periférico, com paralelismo| 
-|:---|---:|---:|---:|---:|---:| 
-|acessos a memória|98,022,228|182,190,800|182,188,449|125,303,577|125,291,700| 
-|_jumps_/_branchs_|86,981,211|148,349,401|148,347,044|104,678,496|104,676,592| 
-|outras instruções|210,422,677|456,224,761|456,220,053|278,718,624|278,714,838| 
-|ciclos em instruções de CPU|1,451,588,590|2,723,180,964|2,723,145,675|1,845,789,882|1,845,661,614| 
-|ciclos interagindo com o periférico|0|0|0|320,000|320,000| 
-|total de ciclos|1,451,588,590|2,723,180,964|2,723,145,675|1,846,109,882|1,845,981,614| 
+| |serial, sem exponenciações|sem periférico, sem paralelismo|sem periférico, com paralelismo|com periférico, sem paralelismo|com periférico, com paralelismo|
+|:---|---:|---:|---:|---:|---:|
+|acessos a memória|98,022,228|182,190,800|182,188,449|125,303,577|125,291,700|
+|_jumps_/_branchs_|86,981,211|148,349,401|148,347,044|104,678,496|104,676,592|
+|outras instruções|210,422,677|456,224,761|456,220,053|278,718,624|278,714,838|
+|ciclos em instruções de CPU|1,451,588,590|2,723,180,964|2,723,145,675|1,845,789,882|1,845,661,614|
+|ciclos interagindo com o periférico|0|0|0|320,000|320,000|
+|total de ciclos|1,451,588,590|2,723,180,964|2,723,145,675|1,846,109,882|1,845,981,614|
 
 A primeira coluna se refere a uma execução do programa exatamente igual às demais, exceto que não se realiza nenhuma operação de exponenciação. Desta forma pode-se calcular qual a carga gerada pela parte serial não paralelizável do código, informação que será necessária para calcular posteriormente o impacto da paralelização.
 
@@ -68,25 +68,25 @@ Nas contagens acima os ciclos dos quatro _cores_ são computados separadamente e
 
 No entanto já é possível analisar a diferença entre o número de ciclos da seção serial do programa e da execução do programa não serial com e sem o uso do periférico.
 
-| |sem periférico, sem paralelismo|sem periférico, com paralelismo|com periférico, sem paralelismo|com periférico, com paralelismo| |
-|:---|---:|---:|---:|---:| |
-|acessos a memória|84,168,572|21,041,555|27,281,349|6,817,368| |
-|_jumps_/_branchs_|61,368,190|15,341,458|17,697,285|4,423,845| |
-|outras instruções|245,802,084|61,449,344|68,295,947|17,073,040| |
-|ciclos em instruções de CPU|1,271,592,374|317,889,271|394,201,292|98,518,256| |
-|ciclos interagindo com o periférico|0|0|320,000|80,000| |
-|total de ciclos|1,271,592,374|317,889,271|394,521,292|98,598,256| |
-||1.000000|0.249993|0.310258|0.077539| |
+| |sem periférico, sem paralelismo|sem periférico, com paralelismo|com periférico, sem paralelismo|com periférico, com paralelismo|
+|:---|---:|---:|---:|---:|
+|acessos a memória|84,168,572|21,041,555|27,281,349|6,817,368|
+|_jumps_/_branchs_|61,368,190|15,341,458|17,697,285|4,423,845|
+|outras instruções|245,802,084|61,449,344|68,295,947|17,073,040|
+|ciclos em instruções de CPU|1,271,592,374|317,889,271|394,201,292|98,518,256|
+|ciclos interagindo com o periférico|0|0|320,000|80,000|
+|total de ciclos|1,271,592,374|317,889,271|394,521,292|98,598,256|
+||1.000000|0.249993|0.310258|0.077539|
 
-| |sem periférico, sem paralelismo|sem periférico, com paralelismo|com periférico, sem paralelismo|com periférico, com paralelismo| |
-|:---|---:|---:|---:|---:| |
-|acessos a memória|182,190,800|119,063,783|125,303,577|104,839,596| |
-|_jumps_/_branchs_|148,349,401|102,322,669|104,678,496|91,405,056| |
-|outras instruções|456,224,761|271,872,021|278,718,624|227,495,717| |
-|ciclos em instruções de CPU|2,723,180,964|1,769,477,861|1,845,789,882|1,550,106,846| |
-|ciclos interagindo com o periférico|0|0|320,000|80,000| |
-|total de ciclos|2,723,180,964|1,769,477,861|1,846,109,882|1,550,186,846| |
-||1.000000|0.649783|0.677924|0.569256| |
+| |sem periférico, sem paralelismo|sem periférico, com paralelismo|com periférico, sem paralelismo|com periférico, com paralelismo|
+|:---|---:|---:|---:|---:|
+|acessos a memória|182,190,800|119,063,783|125,303,577|104,839,596|
+|_jumps_/_branchs_|148,349,401|102,322,669|104,678,496|91,405,056|
+|outras instruções|456,224,761|271,872,021|278,718,624|227,495,717|
+|ciclos em instruções de CPU|2,723,180,964|1,769,477,861|1,845,789,882|1,550,106,846|
+|ciclos interagindo com o periférico|0|0|320,000|80,000|
+|total de ciclos|2,723,180,964|1,769,477,861|1,846,109,882|1,550,186,846|
+||1.000000|0.649783|0.677924|0.569256|
 
 
 ## Referências
