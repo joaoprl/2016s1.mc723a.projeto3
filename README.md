@@ -123,7 +123,12 @@ Aqui ficam patentes os ganhos na seção de execução que efetivamente realiza 
 É claro que o programa não se resume à parte das operações de interesse, há todo o _overhead_ de execução além da leitura e escrita de arquivos que compõe a parte não paralelizável. Para estimar o tempo de execução para que o programa seja encerrado, foram somados os valores desta parte serial com os valores referentes a apenas um _core_ (acima), o que reflete adequadamente a forma como o programa funciona (apenas um _core_ executa a parte serial e a parte paralelizável é dividida entre os quatro).
 
 O resultado final é uma redução do número ciclos (do _core_ com maior carga) de ~35% somente com a paralelização, ~32% somente com o periférico, e ~43% utilizando ambos os recursos.  
-Estes valores, comparados com a redução muito mais dramática na parte paralelizável da execução, mostram como o _overhead_ de execução e a parte não paralelizável podem limitar os ganhos nas seções de maior interesse do programa. É claro que as limitações da arquitetura MIPS agravam este problema, além do que o uso de um número maior de operações de exponenciação e multiplicação (dez mil é um número pequeno, apesar da demora de execução do simulador) reduziriam essa diferença no ganho de _performance_.
+Estes valores, comparados com a redução muito mais dramática na parte paralelizável da execução, mostram como o _overhead_ de execução e a parte não paralelizável podem limitar os ganhos nas seções de maior interesse do programa.
+
+É claro que as limitações da arquitetura MIPS agravam este problema, consumindo um número extremamente elevado de ciclos para ler e escrever arquivos.  
+Além disso, dez mil operações de exponenciação/multiplicação é um número muito pequeno, seria interessante aumentar esse número em várias ordens de grandeza; no entanto isso tornaria o tempo de simulação impraticável.
+
+Assim conclui-se que a parte mais relevante dos resultados é efetivamente a análise da seção paralelizável, na que foi demonstrado que mesmo em arquiteturas simples como a MIPS, a adição de um periférico adequado para as demandas de processamento e o aumento do número de _cores_ pode reduzir drasticamente o tempo de execução de programas, especialmente em ambientes como o bancário em que boa parte do processamento é realizado em _batches_.  
 
 
 ## Referências
